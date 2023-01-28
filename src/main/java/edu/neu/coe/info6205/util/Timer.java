@@ -1,5 +1,6 @@
 package edu.neu.coe.info6205.util;
 
+import java.time.Clock;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -55,10 +56,29 @@ public class Timer {
      * @return the average milliseconds per repetition.
      */
     public <T, U> double repeat(int n, Supplier<T> supplier, Function<T, U> function, UnaryOperator<T> preFunction, Consumer<U> postFunction) {
+        pause();
         logger.trace("repeat: with " + n + " runs");
         // FIXME: note that the timer is running when this method is called and should still be running when it returns. by replacing the following code
-         return 0;
-        // END 
+        if (preFunction != null) {
+            preFunction.apply(supplier.get());
+        }
+
+        U finalValue = null;
+        resume();
+        for (int i = 0; i < n; i++) {
+            finalValue = function.apply(supplier.get());
+            lap();
+        }
+        pause();
+        double meanLapTime = meanLapTime();
+        resume();
+
+
+        if (postFunction != null) {
+            postFunction.accept(finalValue);
+        }
+        return meanLapTime;
+        // END
     }
 
     /**
@@ -177,8 +197,9 @@ public class Timer {
      */
     private static long getClock() {
         // FIXME by replacing the following code
-         return 0;
-        // END 
+        //Clock clock = Clock.systemUTC();
+        return java.lang.System.nanoTime();
+        // END
     }
 
     /**
@@ -190,8 +211,8 @@ public class Timer {
      */
     private static double toMillisecs(long ticks) {
         // FIXME by replacing the following code
-         return 0;
-        // END 
+        return (double) ticks/1000000;
+        // END
     }
 
     final static LazyLogger logger = new LazyLogger(Timer.class);
