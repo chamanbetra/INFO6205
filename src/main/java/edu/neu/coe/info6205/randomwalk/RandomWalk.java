@@ -4,7 +4,12 @@
 
 package edu.neu.coe.info6205.randomwalk;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
+
 
 public class RandomWalk {
 
@@ -21,8 +26,10 @@ public class RandomWalk {
      */
     private void move(int dx, int dy) {
         // FIXME do move by replacing the following code
-         throw new RuntimeException("Not implemented");
-        // END 
+        x = x + dx;
+        y = y + dy;
+//        throw new RuntimeException("Not implemented");
+        // END
     }
 
     /**
@@ -32,7 +39,11 @@ public class RandomWalk {
      */
     private void randomWalk(int m) {
         // FIXME
-        // END 
+        for(int i =0; i<m; i++)
+        {
+            randomMove();
+        }
+        // END
     }
 
     /**
@@ -52,8 +63,10 @@ public class RandomWalk {
      */
     public double distance() {
         // FIXME by replacing the following code
-         return 0.0;
-        // END 
+        double result;
+        result = Math.sqrt((Math.pow(x,2) + Math.pow(y,2)));
+        return result;
+        // END
     }
 
     /**
@@ -73,14 +86,18 @@ public class RandomWalk {
         return totalDistance / n;
     }
 
-    public static void main(String[] args) {
-        if (args.length == 0)
-            throw new RuntimeException("Syntax: RandomWalk steps [experiments]");
-        int m = Integer.parseInt(args[0]);
-        int n = 30;
-        if (args.length > 1) n = Integer.parseInt(args[1]);
-        double meanDistance = randomWalkMulti(m, n);
-        System.out.println(m + " steps: " + meanDistance + " over " + n + " experiments");
+    public static void main(String[] args) throws IOException {
+
+        int m = 4;
+        int n = 1000;
+
+        for(int i = 1; i<=10; i++) {
+            if(args.length > 1)
+                n = Integer.parseInt(args[1]);
+            double meanDistance = randomWalkMulti(m, n);
+            System.out.println(m + " steps: " + meanDistance + " over " + n + " experiments");
+            m = m + 50;
+        }
     }
 
 }
