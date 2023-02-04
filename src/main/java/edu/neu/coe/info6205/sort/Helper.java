@@ -13,7 +13,7 @@ import static java.util.Arrays.binarySearch;
  *
  * @param <X>
  */
-public interface Helper<X extends Comparable<X>> extends GenericHelper<X> {
+public interface    Helper<X extends Comparable<X>> extends GenericHelper<X> {
 
     /**
      * Compare value v with value w.

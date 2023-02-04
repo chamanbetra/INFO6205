@@ -197,7 +197,6 @@ public class Timer {
      */
     private static long getClock() {
         // FIXME by replacing the following code
-        //Clock clock = Clock.systemUTC();
         return java.lang.System.nanoTime();
         // END
     }
