@@ -1,6 +1,5 @@
 package edu.neu.coe.info6205.util;
 
-import java.time.Clock;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -56,28 +55,27 @@ public class Timer {
      * @return the average milliseconds per repetition.
      */
     public <T, U> double repeat(int n, Supplier<T> supplier, Function<T, U> function, UnaryOperator<T> preFunction, Consumer<U> postFunction) {
-        pause();
         logger.trace("repeat: with " + n + " runs");
         // FIXME: note that the timer is running when this method is called and should still be running when it returns. by replacing the following code
-        if (preFunction != null) {
-            preFunction.apply(supplier.get());
-        }
 
-        U finalValue = null;
-        resume();
+
         for (int i = 0; i < n; i++) {
-            finalValue = function.apply(supplier.get());
+            T t = supplier.get();
+            pause();
+            if (preFunction != null) t = preFunction.apply(t);
+            resume();
+            U u = function.apply(t);
+            pause();
+            if (postFunction != null) postFunction.accept(u);
+            resume();
             lap();
         }
+
         pause();
-        double meanLapTime = meanLapTime();
+        final double result = meanLapTime();
         resume();
+        return result;
 
-
-        if (postFunction != null) {
-            postFunction.accept(finalValue);
-        }
-        return meanLapTime;
         // END
     }
 
@@ -210,7 +208,8 @@ public class Timer {
      */
     private static double toMillisecs(long ticks) {
         // FIXME by replacing the following code
-        return (double) ticks/1000000;
+        double tick = ticks;
+        return tick/1000000;
         // END
     }
 
