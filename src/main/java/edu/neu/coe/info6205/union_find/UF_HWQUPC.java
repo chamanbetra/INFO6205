@@ -194,20 +194,18 @@ public class UF_HWQUPC implements UF {
     public static void main(String[] args) {
         {
             int runs = 50;
-            Scanner sc = new Scanner(System.in);
-            
-            while(sc.hasNext()) {
-                System.out.println("Enter the number of objects");
-                int N = sc.nextInt();
+            int n[] = {1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000};
+
+                for(int j = 0; j<n.length; j++)
+                {
+                int N = n[j];
                 int count =0;
                 for(int i=0;i<runs;i++) {
                     count+= count(N);
-//                    System.out.println(count);
                 }
 
                 int avg = count/runs;
                 System.out.println("No.of objects = " + N + " and the average of number of pairs generated for 50 runs " + avg);
-
             }
 
 
