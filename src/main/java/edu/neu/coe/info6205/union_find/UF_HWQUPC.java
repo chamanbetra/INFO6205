@@ -1,13 +1,10 @@
-/**
- * Original code:
- * Copyright © 2000–2017, Robert Sedgewick and Kevin Wayne.
- * <p>
- * Modifications:
- * Copyright (c) 2017. Phasmid Software
- */
 package edu.neu.coe.info6205.union_find;
 
+import java.io.BufferedReader;
 import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Height-weighted Quick Union with Path Compression
@@ -20,7 +17,7 @@ public class UF_HWQUPC implements UF {
      * @param q the integer representing the other site
      */
     public void connect(int p, int q) {
-        if (!isConnected(p, q)) union(p, q);
+        if (!connected(p, q)) union(p, q);
     }
 
     /**
@@ -80,10 +77,14 @@ public class UF_HWQUPC implements UF {
      */
     public int find(int p) {
         validate(p);
-        int root = p;
-        // FIXME
-        // END 
-        return root;
+        // TO BE IMPLEMENTED
+        while (p != parent[p]) {
+            if (this.pathCompression) {
+                doPathCompression(p);
+            }
+            p = parent[p];
+        }
+        return p;
     }
 
     /**
@@ -169,15 +170,63 @@ public class UF_HWQUPC implements UF {
     private boolean pathCompression;
 
     private void mergeComponents(int i, int j) {
-        // FIXME make shorter root point to taller one
-        // END 
+        // TO BE IMPLEMENTED make shorter root point to taller one
+//        int p=find(i);
+//        int q = find(j);
+        if (i == j) return;
+        if (height[i] < height[j]) {
+            parent[i] = j;
+            height[j] += height[i];
+        } else {
+            parent[j] = i;
+            height[i] += height[j];
+        }
     }
 
     /**
      * This implements the single-pass path-halving mechanism of path compression
      */
     private void doPathCompression(int i) {
-        // FIXME update parent to value of grandparent
-        // END 
+        // TO BE IMPLEMENTED update parent to value of grandparent
+        parent[i] = parent[parent[i]];
     }
+
+    public static void main(String[] args) {
+        {
+            int runs = 50;
+            Scanner sc = new Scanner(System.in);
+            
+            while(sc.hasNext()) {
+                System.out.println("Enter the number of objects");
+                int N = sc.nextInt();
+                int count =0;
+                for(int i=0;i<runs;i++) {
+                    count+= count(N);
+//                    System.out.println(count);
+                }
+
+                int avg = count/runs;
+                System.out.println("No.of objects = " + N + " and the average of number of pairs generated for 50 runs " + avg);
+
+            }
+
+
+        }
+    }
+
+    private static int count(int n) {
+        UF_HWQUPC uf = new UF_HWQUPC(n);
+        int count = 0;
+        Random r = new Random();
+        while(uf.count>1){
+            int p = r.nextInt(n);
+            int q = r.nextInt(n);
+            if(!uf.connected(p,q)){
+                uf.union(p,q);
+            }
+            count+=1;
+        }
+        return count;
+    }
+
 }
