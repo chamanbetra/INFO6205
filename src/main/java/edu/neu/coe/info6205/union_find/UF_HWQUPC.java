@@ -17,7 +17,7 @@ public class UF_HWQUPC implements UF {
      * @param q the integer representing the other site
      */
     public void connect(int p, int q) {
-        if (!connected(p, q)) union(p, q);
+        if (!isConnected(p, q)) union(p, q);
     }
 
     /**
