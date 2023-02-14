@@ -5,7 +5,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * This code has been fleshed out by Ziyao Qiao. Thanks very much.
- * CONSIDER tidy it up a bit.
+ * TODO tidy it up a bit.
  */
 class ParSort {
 
@@ -19,6 +19,8 @@ class ParSort {
             CompletableFuture<int[]> parsort2 = parsort(array, from + (to - from) / 2, to); // TO IMPLEMENT
             CompletableFuture<int[]> parsort = parsort1.thenCombine(parsort2, (xs1, xs2) -> {
                 int[] result = new int[xs1.length + xs2.length];
+//                System.out.println("xs1" +xs1.length);
+//                System.out.println("xs2" +xs2.length);
                 // TO IMPLEMENT
                 int i = 0;
                 int j = 0;
@@ -50,7 +52,7 @@ class ParSort {
                     System.arraycopy(array, from, result, 0, result.length);
                     sort(result, 0, to - from);
                     return result;
-                }
+                }, Main.myPool
         );
     }
 }
